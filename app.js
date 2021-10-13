@@ -6,6 +6,9 @@
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor"); //  jsColor의 이름을 가진 모든 div 를 가져온다.
+const range = document.getElementById("jsRange");
+const mode = document.getElementById("jsMode");
+
 
 // canvas 내의 pixel 에 접근하기 위해 size 를 설정한다.
 canvas.width = 700;
@@ -18,6 +21,7 @@ ctx.strokeStyle = "#d0ff00";
 ctx.lineWidth = 2.5;
 
 let painting = false;
+let filling = false;
 
 function startPainting() {
     painting = true;
@@ -52,6 +56,25 @@ function handleColorClick(event) {
     ctx.strokeStyle = color;
 }
 
+// change brush size
+function handleRangeChange(event) {
+    // console.log(event.target.value);
+    const size = event.target.value;
+    ctx.lineWidth = size;
+
+}
+
+// change brush mode (fill vs paint : 버튼을 클릭할 때마다 이름 변경)
+function handleModeClick() {
+    if (filling === true) {
+        filling = false;
+        mode.innerText ="FILL"
+    } else {
+        filling = true;
+        mode.innerText="PAINT"
+    }
+}
+
 /*
  canvas 에서 발생하는 이벤트를 감지한다.
  Ex) canvas에서 "mouseenter" 이벤트가 발생하면 해당 이벤트를 function onMouseMove 에게 보낸다.
@@ -64,6 +87,15 @@ if (canvas) { // canvas가 있는지 체크
     canvas.addEventListener("mouseleave", stopPainting); // 커서가 캔버스를 벗어나는지 체크크
 }
 
+
 // console.log(Array.from(colors)); // object 로부터 array 를 생성한다.
 // color에 click이 발생하면 이벤트를 handleColorClick 에게 보낸다.
 Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick));
+
+if (range) {
+    range.addEventListener("input", handleRangeChange);
+}
+
+if (mode) {
+    mode.addEventListener("click", handleModeClick);
+}
