@@ -5,6 +5,7 @@
 
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
+const colors = document.getElementsByClassName("jsColor"); //  jsColor의 이름을 가진 모든 div 를 가져온다.
 
 // canvas 내의 pixel 에 접근하기 위해 size 를 설정한다.
 canvas.width = 700;
@@ -40,13 +41,15 @@ function onMouseMove(event) {
         console.log("creating line ", x, y)
         ctx.lineTo(x, y); // 선 끝 좌표. 이전 위치에서 현재 위치까지 선을 연결한다.
         ctx.stroke(); // 선 그리기
-        ctx.closePath();
     }
 }
 
-// 클릭하는 순간 painting => true 로 변경한다.
-function onMouseDown(event) {
-    startPainting();
+
+function handleColorClick(event) {
+    // console.log(event.target.style);
+    const color = event.target.style.backgroundColor;
+    console.log(color);
+    ctx.strokeStyle = color;
 }
 
 /*
@@ -60,3 +63,7 @@ if (canvas) { // canvas가 있는지 체크
     canvas.addEventListener("mouseup", stopPainting); // 마우스 버튼을 뗀 순간 체크.
     canvas.addEventListener("mouseleave", stopPainting); // 커서가 캔버스를 벗어나는지 체크크
 }
+
+// console.log(Array.from(colors)); // object 로부터 array 를 생성한다.
+// color에 click이 발생하면 이벤트를 handleColorClick 에게 보낸다.
+Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick));
