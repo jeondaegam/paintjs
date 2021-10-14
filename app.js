@@ -8,6 +8,7 @@ const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor"); //  jsColor의 이름을 가진 모든 div 를 가져온다.
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
+const saveBtn = document.getElementById("jsSave");
 
 
 const INITIAL_COLOR = "#d0ff00";
@@ -25,6 +26,7 @@ let filling = false;
 ctx.strokeStyle = INITIAL_COLOR;
 ctx.fillStyle = INITIAL_COLOR;
 ctx.lineWidth = 2.5;
+ctx.fillStyle = "white";
 
 /*
 ctx.fillStyle ="green";
@@ -93,6 +95,19 @@ function handleCanvasClick() {
     }
 }
 
+function handleCM(event) {
+console.log(event);
+event.preventDefault(); // 우클릭 방지
+}
+
+function handleSaveClick(){
+     const image = canvas.toDataURL(); // default - png, "image/jpeg"
+     const link = document.createElement("a");
+     link.href = image;
+     link.download = "PaintJS[🎨]"
+     link.click();
+     console.log(image);
+}
 
 /*
  canvas 에서 발생하는 이벤트를 감지한다.
@@ -106,6 +121,7 @@ if (canvas) { // canvas가 있는지 체크
     canvas.addEventListener("mouseleave", stopPainting); // 커서가 캔버스를 벗어나는지 체크
 
     canvas.addEventListener("click", handleCanvasClick);
+    canvas.addEventListener("contextmenu", handleCM);
 }
 
 
@@ -119,4 +135,8 @@ if (range) {
 
 if (mode) {
     mode.addEventListener("click", handleModeClick);
+}
+
+if (saveBtn) {
+    saveBtn.addEventListener("click", handleSaveClick);
 }
