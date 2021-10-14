@@ -10,18 +10,28 @@ const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 
 
+const INITIAL_COLOR = "#d0ff00";
 // canvas 내의 pixel 에 접근하기 위해 size 를 설정한다.
-canvas.width = 700;
-canvas.height = 700;
+const CANVAS_SIZE = 700;
+canvas.width = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE;
 //canvas.width = document.getElementsByClassName("canvas")[0].offsetWidth;
 // 직접 값을 주면 오류의 여지가 있으므로 캔버스 크기를 가져올 수도 있다.
 
-//set the context default
-ctx.strokeStyle = "#d0ff00";
-ctx.lineWidth = 2.5;
-
 let painting = false;
 let filling = false;
+
+//set the context default
+ctx.strokeStyle = INITIAL_COLOR;
+ctx.fillStyle = INITIAL_COLOR;
+ctx.lineWidth = 2.5;
+
+/*
+ctx.fillStyle ="green";
+ctx.fillRect(50, 20, 100, 40); // x,y 위치에 색칠된 사각형을 그린다.
+ctx.fillStyle="purple";
+ctx.fillRect(330, 400, 100, 40); // x,y 위치에 색칠된 사각형을 그린다.
+*/
 
 function startPainting() {
     painting = true;
@@ -45,6 +55,7 @@ function onMouseMove(event) {
         console.log("creating line ", x, y)
         ctx.lineTo(x, y); // 선 끝 좌표. 이전 위치에서 현재 위치까지 선을 연결한다.
         ctx.stroke(); // 선 그리기
+
     }
 }
 
@@ -52,8 +63,9 @@ function onMouseMove(event) {
 function handleColorClick(event) {
     // console.log(event.target.style);
     const color = event.target.style.backgroundColor;
-    console.log(color);
     ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    console.log(color);
 }
 
 // change brush size
@@ -61,19 +73,26 @@ function handleRangeChange(event) {
     // console.log(event.target.value);
     const size = event.target.value;
     ctx.lineWidth = size;
-
 }
 
 // change brush mode (fill vs paint : 버튼을 클릭할 때마다 이름 변경)
 function handleModeClick() {
     if (filling === true) {
         filling = false;
-        mode.innerText ="FILL"
+        mode.innerText = "FILL"
     } else {
         filling = true;
-        mode.innerText="PAINT"
+        mode.innerText = "PAINT"
     }
 }
+
+// filling canvas
+function handleCanvasClick() {
+    if (filling) {
+        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    }
+}
+
 
 /*
  canvas 에서 발생하는 이벤트를 감지한다.
@@ -84,7 +103,9 @@ if (canvas) { // canvas가 있는지 체크
     canvas.addEventListener("mousedown", startPainting); // 클릭 했을 때, 마우스 버튼을 누르는 순간을 체크.
 
     canvas.addEventListener("mouseup", stopPainting); // 마우스 버튼을 뗀 순간 체크.
-    canvas.addEventListener("mouseleave", stopPainting); // 커서가 캔버스를 벗어나는지 체크크
+    canvas.addEventListener("mouseleave", stopPainting); // 커서가 캔버스를 벗어나는지 체크
+
+    canvas.addEventListener("click", handleCanvasClick);
 }
 
 
