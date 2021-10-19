@@ -10,8 +10,8 @@ const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 const saveBtn = document.getElementById("jsSave");
 
-
 const INITIAL_COLOR = "#d0ff00";
+
 // canvas 내의 pixel 에 접근하기 위해 size 를 설정한다.
 const CANVAS_SIZE = 700;
 canvas.width = CANVAS_SIZE;
@@ -43,6 +43,11 @@ function stopPainting() {
     painting = false;
 }
 
+// random rgb 값 생성
+function randomRgb() {
+    return Math.round(Math.random() * 255);
+}
+
 // 커서의 움직임을 감지하고 선을 그린다.
 function onMouseMove(event) {
     const x = event.offsetX;
@@ -54,7 +59,7 @@ function onMouseMove(event) {
         ctx.beginPath(); // 선의 시작 점을 생성. 클릭하는 순간 시작점이 사용된다.
         ctx.moveTo(x, y); // 선의 시작 좌표
     } else {
-        console.log("creating line ", x, y)
+        //console.log("creating line ", x, y)
         ctx.lineTo(x, y); // 선 끝 좌표. 이전 위치에서 현재 위치까지 선을 연결한다.
         ctx.stroke(); // 선 그리기
 
@@ -63,11 +68,18 @@ function onMouseMove(event) {
 
 
 function handleColorClick(event) {
-    // console.log(event.target.style);
     const color = event.target.style.backgroundColor;
     ctx.strokeStyle = color;
     ctx.fillStyle = color;
-    console.log(color);
+    console.log(ctx.strokeStyle);
+
+    // random color
+    if (color.length === 0) {
+        const randomColor = "rgb(" + randomRgb() + "," + randomRgb() + "," + randomRgb() + ")";
+        ctx.strokeStyle = randomColor;
+        ctx.fillStyle = randomColor;
+        console.log(randomColor);
+    }
 }
 
 // change brush size
@@ -96,17 +108,17 @@ function handleCanvasClick() {
 }
 
 function handleCM(event) {
-console.log(event);
-event.preventDefault(); // 우클릭 방지
+    console.log(event);
+    event.preventDefault(); // 우클릭 방지
 }
 
-function handleSaveClick(){
-     const image = canvas.toDataURL(); // default - png, "image/jpeg"
-     const link = document.createElement("a");
-     link.href = image;
-     link.download = "PaintJS[🎨]"
-     link.click();
-     console.log(image);
+function handleSaveClick() {
+    const image = canvas.toDataURL(); // default - png, "image/jpeg"
+    const link = document.createElement("a");
+    link.href = image;
+    link.download = "PaintJS[🎨]"
+    link.click();
+    console.log(image);
 }
 
 /*
