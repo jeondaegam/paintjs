@@ -35,6 +35,12 @@ ctx.fillStyle="purple";
 ctx.fillRect(330, 400, 100, 40); // x,y 위치에 색칠된 사각형을 그린다.
 */
 
+// gradient color
+const gradient = ctx.createLinearGradient(0,0,600,600); // gradient 시작점과 끝점 설정
+gradient.addColorStop(0, 'green'); // color spot 설정
+gradient.addColorStop(.5, 'yellow');
+gradient.addColorStop(1, 'violet');
+
 function startPainting() {
     painting = true;
 }
@@ -59,10 +65,9 @@ function onMouseMove(event) {
         ctx.beginPath(); // 선의 시작 점을 생성. 클릭하는 순간 시작점이 사용된다.
         ctx.moveTo(x, y); // 선의 시작 좌표
     } else {
-        //console.log("creating line ", x, y)
+        // console.log("creating line ", x, y)
         ctx.lineTo(x, y); // 선 끝 좌표. 이전 위치에서 현재 위치까지 선을 연결한다.
         ctx.stroke(); // 선 그리기
-
     }
 }
 
@@ -80,6 +85,15 @@ function handleColorClick(event) {
         ctx.fillStyle = randomColor;
         console.log(randomColor);
     }
+
+    // rainbow color
+    if (event.target.classList.contains("rainbow")) {
+        // console.log(event.target.className); // controls_color jsColor rainbow
+        // console.log(event.target.classList); // object
+        ctx.strokeStyle = gradient;
+        ctx.fillStyle = gradient;
+    }
+
 }
 
 // change brush size
