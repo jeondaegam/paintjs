@@ -9,6 +9,7 @@ const colors = document.getElementsByClassName("jsColor"); //  jsColor의 이름
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 const saveBtn = document.getElementById("jsSave");
+// const getRandomRGB = () => `rgb( ${new Array(3).fill().map(v => Math.random() * 255).join(", ")} )`;
 
 const INITIAL_COLOR = "#d0ff00";
 
@@ -36,7 +37,7 @@ ctx.fillRect(330, 400, 100, 40); // x,y 위치에 색칠된 사각형을 그린�
 */
 
 // gradient color
-const gradient = ctx.createLinearGradient(0,0,600,600); // gradient 시작점과 끝점 설정
+const gradient = ctx.createLinearGradient(0, 0, 600, 600); // gradient 범위: 시작점과 끝점 설정
 gradient.addColorStop(0, 'green'); // color spot 설정
 gradient.addColorStop(.5, 'yellow');
 gradient.addColorStop(1, 'violet');
@@ -71,28 +72,26 @@ function onMouseMove(event) {
     }
 }
 
-
+// color 선택
 function handleColorClick(event) {
-    const color = event.target.style.backgroundColor;
-    ctx.strokeStyle = color;
-    ctx.fillStyle = color;
-    console.log(ctx.strokeStyle);
+    let color = event.target.style.backgroundColor;
+    const className = event.target.classList;
 
     // random color
-    if (color.length === 0) {
-        const randomColor = "rgb(" + randomRgb() + "," + randomRgb() + "," + randomRgb() + ")";
-        ctx.strokeStyle = randomColor;
-        ctx.fillStyle = randomColor;
-        console.log(randomColor);
+    if (className.contains("random")) {
+        color = "rgb(" + randomRgb() + "," + randomRgb() + "," + randomRgb() + ")";
     }
-
     // rainbow color
-    if (event.target.classList.contains("rainbow")) {
+    if (className.contains("rainbow")) {
         // console.log(event.target.className); // controls_color jsColor rainbow
         // console.log(event.target.classList); // object
-        ctx.strokeStyle = gradient;
-        ctx.fillStyle = gradient;
+        color = gradient;
     }
+
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+
+    console.log(ctx.strokeStyle);
 
 }
 
